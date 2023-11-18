@@ -30,17 +30,15 @@ void printAll();
 
 int main(int argc, char *argv[]) {
     readDatabase();
-    for(int i= 1; i < argc ; i++){
+    for(int i= 1; i < argc; i++){
         char *command = argv[i];
 
         if(validCommand(command)){
-
             char *op = strtok(command, ",");
             char *k = strtok(NULL, ",");
             char *val = strtok(NULL, ",");
-
+            if(val != NULL) strcat(val, "\n");
             if(strcmp(op, "p") == 0){
-                asprintf(&val, "%s%s", val, "\n");
                 put(atoi(k), val);
             }
             else if(strcmp(op, "g") == 0){
@@ -105,10 +103,13 @@ void badCommand(){
 }
 
 struct Node* newNode(int k, char *val){
-    struct Node* node = malloc(sizeof (struct Node));
+    struct Node* node = (struct Node *)malloc(sizeof(struct Node));
+    if (node == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
     node->k = k;
-    node->val = malloc(strlen(val) + 1);
-    strcpy(node->val, val);
+    node->val = strdup(val);
     node->next = NULL;
     return node;
 }
