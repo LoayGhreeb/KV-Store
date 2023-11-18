@@ -93,12 +93,11 @@ void storeDatabase(){
 }
 
 bool validCommand(char * command){
-    char *valid = "^(a|c|p,[0-9]+,[a-zA-Z0-9]+|(d|g),[0-9]+)$";
+    char *valid = "^(p,[0-9]+,[a-zA-Z0-9]+|[gd],[0-9]+|[ca])$";
     regex_t regex;
     int result = regcomp(&regex, valid, REG_EXTENDED);
     result = regexec(&regex, command, 0, NULL, 0);
-    if (result == 0)  return true;
-    else return false;
+    return !result;
 }
 
 void badCommand(){
